@@ -1,0 +1,39 @@
+.container {
+  margin: 0 auto;
+  width: 952px;
+  display: flex;
+  flex-direction: column;
+  row-gap: calc(var(--offset-base-size) * 6);
+}
+
+.wrapper {
+  display: flex;
+  column-gap: calc(var(--offset-base-size) * 6);
+}
+
+.list {
+  margin: 0 auto;
+  padding: calc(var(--offset-base-size) * 45) 0 0;
+  box-sizing: border-box;
+  max-width: 1040px;
+  list-style-type: none;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: calc(var(--offset-base-size) * 8);
+}
+
+.circle {
+  display: flex;
+  align-items: center;
+  column-gap: calc(var(--offset-base-size) * 8);
+}
+
+.input {
+  width: 204px;
+}
+
+.button {
+  flex-grow: 1;
+}

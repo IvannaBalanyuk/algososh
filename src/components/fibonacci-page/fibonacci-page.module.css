@@ -1,0 +1,20 @@
+.wrapper {
+  margin: 0 auto;
+  width: 567px;
+  display: flex;
+  column-gap: calc(var(--offset-base-size) * 6);
+}
+
+.list {
+  margin: 0 auto;
+  padding: calc(var(--offset-base-size) * 24) 0 0;
+  max-width: 944px;
+  box-sizing: border-box;
+  list-style-type: none;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: calc(var(--offset-base-size) * 8);
+  row-gap: calc(var(--offset-base-size) * 33);
+}
