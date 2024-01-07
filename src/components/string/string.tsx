@@ -37,7 +37,7 @@ export const StringComponent: React.FC = () => {
         <Input
           maxLength={11}
           isLimitText={true}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+          onChange={handleChange}
           value={values.string}
           name={"string"}
           disabled={isLoader}
@@ -47,6 +47,7 @@ export const StringComponent: React.FC = () => {
           text={"Развернуть"}
           isLoader={isLoader}
           linkedList={"big"}
+          disabled={!values.string}
         />
       </form>
       <ul className={styles.list}>

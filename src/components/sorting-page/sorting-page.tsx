@@ -30,20 +30,28 @@ export const SortingPage: React.FC = () => {
     setSortingType(sorting);
   };
 
-  const checkDirectionHandler = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!(e.target instanceof HTMLButtonElement)) return;
-
-    const direction =
-      e.target.dataset.direction === Direction.Ascending
-        ? Direction.Ascending
-        : Direction.Descending;
-    setDirection(direction);
+  const ascendingDirectionHandler = async () => {
+    setDirection(Direction.Ascending);
     setIsLoader(true);
 
     if (sortingType === Sorting.Bubble) {
-      await bubbleSort(columnsArr, direction, setColumnsArr);
+      await bubbleSort(columnsArr, Direction.Ascending, setColumnsArr);
     } else {
-      await selectionSort(columnsArr, direction, setColumnsArr);
+      await selectionSort(columnsArr, Direction.Ascending, setColumnsArr);
+    }
+    
+    setDirection(null);
+    setIsLoader(false);
+  };
+
+  const descendingDirectionHandler = async () => {
+    setDirection(Direction.Descending);
+    setIsLoader(true);
+
+    if (sortingType === Sorting.Bubble) {
+      await bubbleSort(columnsArr, Direction.Descending, setColumnsArr);
+    } else {
+      await selectionSort(columnsArr, Direction.Descending, setColumnsArr);
     }
     
     setDirection(null);
@@ -86,7 +94,7 @@ export const SortingPage: React.FC = () => {
             linkedList={"big"}
             sorting={Direction.Ascending}
             data-direction={Direction.Ascending}
-            onClick={checkDirectionHandler}
+            onClick={ascendingDirectionHandler}
             isLoader={direction === Direction.Ascending && isLoader}
             disabled={direction === Direction.Descending && isLoader}
           />
@@ -96,7 +104,7 @@ export const SortingPage: React.FC = () => {
             linkedList={"big"}
             sorting={Direction.Descending}
             data-direction={Direction.Descending}
-            onClick={checkDirectionHandler}
+            onClick={descendingDirectionHandler}
             isLoader={direction === Direction.Descending && isLoader}
             disabled={direction === Direction.Ascending && isLoader}
           />

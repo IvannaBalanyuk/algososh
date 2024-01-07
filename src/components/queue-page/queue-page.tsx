@@ -9,6 +9,7 @@ import { Queue } from "./utils";
 import { Action } from "../../types/action";
 import useForm from "../../hooks/useForm";
 import { setTimeoutPromise } from "../../utils/common";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 const queue = new Queue<string>();
 
@@ -50,7 +51,7 @@ export const QueuePage: React.FC = () => {
       tailIndex: queue.getTail(),
       addIndex: queue.getTail(),
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
     setQueueState({
       ...queueState,
       items: queue.getItems(),
@@ -75,7 +76,7 @@ export const QueuePage: React.FC = () => {
       ...queueState,
       deletedIndex: queue.getHead(),
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
     setQueueState({
       ...queueState,
       deletedIndex: null,
@@ -116,9 +117,7 @@ export const QueuePage: React.FC = () => {
           <Input
             maxLength={4}
             isLimitText={true}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(e)
-            }
+            onChange={handleChange}
             value={values.string}
             name={"string"}
             disabled={isLoader}
@@ -127,7 +126,7 @@ export const QueuePage: React.FC = () => {
             type="submit"
             text="Добавить"
             isLoader={isLoader && action === Action.Add}
-            disabled={isLoader && action !== Action.Add}
+            disabled={!values.string || (isLoader && action !== Action.Add)}
           />
           <Button
             type="button"

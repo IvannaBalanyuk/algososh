@@ -10,6 +10,7 @@ import useForm from "../../hooks/useForm";
 import { LinkedList } from "./utils";
 import { getRandomStrArr, setTimeoutPromise } from "../../utils/common";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 type TListState = {
   items: string[];
@@ -53,7 +54,7 @@ export const ListPage: React.FC = () => {
       ...listState,
       topIndex: 0,
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     setListState({
       ...listState,
@@ -66,7 +67,7 @@ export const ListPage: React.FC = () => {
       items: newItems,
       modifiedIndex: 0,
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     setListState({
       ...listState,
@@ -91,7 +92,7 @@ export const ListPage: React.FC = () => {
       ...listState,
       topIndex: linkedList.getSize() - 1,
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     linkedList.addToTail(values.string);
     const newItems = linkedList.turnIntoArr();
@@ -101,7 +102,7 @@ export const ListPage: React.FC = () => {
       topIndex: null,
       modifiedIndex: linkedList.getSize() - 1,
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     setListState({
       ...listState,
@@ -125,7 +126,7 @@ export const ListPage: React.FC = () => {
       ...listState,
       bottomIndex: 0,
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     linkedList.delFromHead();
     setListState({
@@ -146,7 +147,7 @@ export const ListPage: React.FC = () => {
       ...listState,
       bottomIndex: linkedList.getSize() - 1,
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     linkedList.delFromTail();
     setListState({
@@ -174,7 +175,7 @@ export const ListPage: React.FC = () => {
         topIndex: currentIndex,
         changingIndex: currentIndex,
       });
-      await setTimeoutPromise(500);
+      await setTimeoutPromise(SHORT_DELAY_IN_MS);
       currentIndex++;
     }
 
@@ -188,7 +189,7 @@ export const ListPage: React.FC = () => {
         modifiedIndex: values.index,
       });
     }
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     setListState({
       ...listState,
@@ -205,37 +206,35 @@ export const ListPage: React.FC = () => {
   };
 
   const delByIndexHandler = async () => {
-    if (values.index && values.index < 0) return;
+    if (values.index === null || values.index < 0) return;
 
     setAction(Action.DeleteByIndex);
     setIsLoader(true);
 
     let currentIndex = -1;
 
-    while (values.index && currentIndex <= values.index) {
+    while (currentIndex <= values.index) {
       setListState({
         ...listState,
         changingIndex: currentIndex,
       });
-      await setTimeoutPromise(500);
+      await setTimeoutPromise(SHORT_DELAY_IN_MS);
       currentIndex++;
     }
 
-    if (values.index) {
-      setListState({
-        ...listState,
-        bottomIndex: values.index,
-        changingIndex: null,
-      });
-      await setTimeoutPromise(500);
+    setListState({
+      ...listState,
+      bottomIndex: values.index,
+      changingIndex: null,
+    });
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
-      linkedList.delByIndex(values.index);
-      setListState({
-        ...listState,
-        items: linkedList.turnIntoArr(),
-        bottomIndex: null,
-      });
-    }
+    linkedList.delByIndex(values.index);
+    setListState({
+      ...listState,
+      items: linkedList.turnIntoArr(),
+      bottomIndex: null,
+    });
 
     setValues({
       ...values,
@@ -246,6 +245,14 @@ export const ListPage: React.FC = () => {
     setAction(null);
   };
 
+  const isIndexValid = (index: number): boolean => {
+    if (index >= 0 && index < listState.items.length) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   return (
     <SolutionLayout title="Связный список">
       <div className={styles.container}>
@@ -254,9 +261,7 @@ export const ListPage: React.FC = () => {
             maxLength={4}
             extraClass={styles.input}
             isLimitText={true}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(e)
-            }
+            onChange={handleChange}
             value={values.string}
             name={"string"}
             disabled={isLoader}
@@ -267,7 +272,9 @@ export const ListPage: React.FC = () => {
             extraClass={styles.button}
             onClick={addToHeadHandler}
             isLoader={isLoader && action === Action.AddToHead}
-            disabled={isLoader && action !== Action.AddToHead}
+            disabled={
+              !values.string || (isLoader && action !== Action.AddToHead)
+            }
           />
           <Button
             type="button"
@@ -275,7 +282,9 @@ export const ListPage: React.FC = () => {
             extraClass={styles.button}
             onClick={addToTailHandler}
             isLoader={isLoader && action === Action.AddToTail}
-            disabled={isLoader && action !== Action.AddToTail}
+            disabled={
+              !values.string || (isLoader && action !== Action.AddToTail)
+            }
           />
           <Button
             type="button"
@@ -283,7 +292,10 @@ export const ListPage: React.FC = () => {
             extraClass={styles.button}
             onClick={delFromHeadHandler}
             isLoader={isLoader && action === Action.DeleteFromHead}
-            disabled={isLoader && action !== Action.DeleteFromHead}
+            disabled={
+              listState.items.length === 0 ||
+              (isLoader && action !== Action.DeleteFromHead)
+            }
           />
           <Button
             type="button"
@@ -291,7 +303,10 @@ export const ListPage: React.FC = () => {
             extraClass={styles.button}
             onClick={delFromTailHandler}
             isLoader={isLoader && action === Action.DeleteFromTail}
-            disabled={isLoader && action !== Action.DeleteFromTail}
+            disabled={
+              listState.items.length === 0 ||
+              (isLoader && action !== Action.DeleteFromTail)
+            }
           />
         </div>
         <div className={styles.wrapper}>
@@ -300,10 +315,12 @@ export const ListPage: React.FC = () => {
             type="number"
             maxLength={1}
             extraClass={styles.input}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(e)
+            min={0}
+            max={listState.items.length - 1}
+            onChange={handleChange}
+            value={
+              values.index !== null && isIndexValid(values.index) ? values.index : ""
             }
-            value={values.index ? values.index : ""}
             name={"index"}
             disabled={isLoader}
           />
@@ -313,7 +330,12 @@ export const ListPage: React.FC = () => {
             extraClass={styles.button}
             onClick={addByIndexHandler}
             isLoader={isLoader && action === Action.AddByIndex}
-            disabled={isLoader && action !== Action.AddByIndex}
+            disabled={
+              !values.string ||
+              values.index === null ||
+              !isIndexValid(values.index) ||
+              (isLoader && action !== Action.AddByIndex)
+            }
           />
           <Button
             type="button"
@@ -321,7 +343,12 @@ export const ListPage: React.FC = () => {
             extraClass={styles.button}
             onClick={delByIndexHandler}
             isLoader={isLoader && action === Action.DeleteByIndex}
-            disabled={isLoader && action !== Action.DeleteByIndex}
+            disabled={
+              listState.items.length <= 1 ||
+              values.index === null ||
+              !isIndexValid(values.index) ||
+              (isLoader && action !== Action.DeleteByIndex)
+            }
           />
         </div>
       </div>

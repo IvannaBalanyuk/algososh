@@ -9,6 +9,7 @@ import { Stack } from "../stack-page/utils";
 import { Action } from "../../types/action";
 import useForm from "../../hooks/useForm";
 import { setTimeoutPromise } from "../../utils/common";
+import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 const stack = new Stack<string>();
 
@@ -44,7 +45,7 @@ export const StackPage: React.FC = () => {
       topIndex: stack.getTop(),
       changedIndex: stack.getTop(),
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
     setStackState({
       items: stack.getItems(),
       topIndex: stack.getTop(),
@@ -68,7 +69,7 @@ export const StackPage: React.FC = () => {
       items: stack.getItems(),
       changedIndex: stack.getTop(),
     });
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
     stack.pop();
     setStackState({
       ...stackState,
@@ -84,7 +85,7 @@ export const StackPage: React.FC = () => {
     setAction(Action.Clear);
     setIsLoader(true);
 
-    await setTimeoutPromise(500);
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
     stack.clear();
     setStackState({
       ...stackState,
@@ -103,9 +104,7 @@ export const StackPage: React.FC = () => {
           <Input
             maxLength={4}
             isLimitText={true}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(e)
-            }
+            onChange={handleChange}
             value={values.string}
             name={"string"}
             disabled={isLoader}
@@ -114,14 +113,14 @@ export const StackPage: React.FC = () => {
             type="submit"
             text="Добавить"
             isLoader={isLoader && action === Action.Add}
-            disabled={isLoader && action !== Action.Add}
+            disabled={!values.string || (isLoader && action !== Action.Add)}
           />
           <Button
             type="button"
             text="Удалить"
             onClick={deleteHandler}
             isLoader={isLoader && action === Action.Delete}
-            disabled={isLoader && action !== Action.Delete}
+            disabled={stackState.items.length === 0 || (isLoader && action !== Action.Delete)}
           />
         </form>
         <Button
@@ -129,7 +128,7 @@ export const StackPage: React.FC = () => {
           text="Очистить"
           onClick={clearHandler}
           isLoader={isLoader && action === Action.Clear}
-          disabled={isLoader && action !== Action.Clear}
+          disabled={stackState.items.length === 0 || (isLoader && action !== Action.Clear)}
         />
       </div>
       <ul className={styles.list}>

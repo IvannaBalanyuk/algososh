@@ -129,17 +129,16 @@ export class LinkedList<T> implements LinkedListType<T> {
     if (index < 0 || index > this.size) {
       throw new Error("Enter a valid index");
     }
+    console.log(index);
 
     if (this.head) {
-      if (index === 0) {
-        this.delFromHead();
-      } else if (index === this.size - 1) {
-        this.delFromTail();
-      } else {
-        let curr: LinkedListNode<T> = this.head;
-        let prev: LinkedListNode<T> = curr;
-        let currIndex = 1;
+      let curr: LinkedListNode<T> = this.head;
+      let prev: LinkedListNode<T> = curr;
+      let currIndex = 1;
 
+      if (index === 0) {
+        this.head = curr.next;
+      } else {
         while (curr.next && currIndex < index) {
           currIndex++;
           prev = curr;

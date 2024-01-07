@@ -38,8 +38,8 @@ export const FibonacciPage: React.FC = () => {
           type="number"
           isLimitText={true}
           max={19}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-          value={values.string}
+          onChange={handleChange}
+          value={Number(values.string) > 0 && Number(values.string) <= 19 ? values.string : ""}
           name={"string"}
           disabled={isLoader}
         />
@@ -48,6 +48,7 @@ export const FibonacciPage: React.FC = () => {
           text={"Рассчитать"}
           isLoader={isLoader}
           linkedList={"big"}
+          disabled={!values.string}
         />
       </form>
       <ul className={styles.list}>
