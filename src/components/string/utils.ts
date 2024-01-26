@@ -1,51 +1,43 @@
-import { TSetLettersArrDispatch, TLetterObj } from "../../types/common";
-import { setStateWithTimeout, swap } from "../../utils/common";
+import { ElementStates } from "../../types/element-states";
 
-export async function reverseStr(
-  str: string,
-  setLettersArr: React.Dispatch<React.SetStateAction<TSetLettersArrDispatch>>
-) {
-  const lettersArr = str.split("").map((letter) => {
-    let circle = {
-      letter: letter,
-      state: "default",
-    };
-    return circle;
-  });
+export function getStringReversalSteps(sourceStr: string): string[][] {
+  const sourceStrLetters = sourceStr.split("");
+  const steps: string[][] = [[...sourceStrLetters]];
 
-  // Указатели на начало и на конец сортируемого участка массива
-  let headIndex = 0;
-  let tailIndex = lettersArr.length - 1;
-
-  // Отрисовка начального состояния массива (цвет - синий)
-  await setStateWithTimeout(setLettersArr, 1000, lettersArr);
-
-  while (headIndex < tailIndex) {
-    swap<TLetterObj>(lettersArr, headIndex, tailIndex);
-
-    // Смена состояния уже отсортированных элементов (цвет - зеленый) и отрисовка массива
-    lettersArr[headIndex].state = "modified";
-    lettersArr[tailIndex].state = "modified";
-    await setStateWithTimeout(setLettersArr, 1000, lettersArr);
-
-    // Сдвиг указателей на единицу
-    headIndex++;
-    tailIndex--;
-
-    // Смена состояния кандидатов на сортировку (цвет - сиреневый) и отрисовка массива
-    if (headIndex < tailIndex) {
-      lettersArr[headIndex].state = "changing";
-      lettersArr[tailIndex].state = "changing";
-      await setStateWithTimeout(setLettersArr, 1000, lettersArr);
-    }
+  if (sourceStr.length <= 1) {
+    return [[...sourceStrLetters]];
   }
 
-  // Смена состояния всех элементов итогового массива (цвет - синий)
-  let resArr = lettersArr.map((letter: TLetterObj) => {
-    letter.state = "default";
-    return letter;
-  });
+  const maxIterationCount = Math.ceil((sourceStr.length - 1) / 2);
 
-  // Отрисовка итогового массива
-  setStateWithTimeout(setLettersArr, 1000, resArr);
+  for (let leftIndex = 0; leftIndex < maxIterationCount; ++leftIndex) {
+    const rightIndex = sourceStr.length - 1 - leftIndex;
+
+    sourceStrLetters[rightIndex] = sourceStr[leftIndex];
+    sourceStrLetters[leftIndex] = sourceStr[rightIndex];
+    steps.push([...sourceStrLetters]);
+  }
+
+  return steps;
+}
+
+export function getLetterState(
+  index: number,
+  maxIndex: number,
+  currentStep: number,
+  isFinished: boolean
+): ElementStates {
+  if (isFinished) {
+    return ElementStates.Default;
+  }
+
+  if (index < currentStep || index > maxIndex - currentStep) {
+    return ElementStates.Modified;
+  }
+
+  if (index === currentStep || index === maxIndex - currentStep) {
+    return ElementStates.Changing;
+  }
+
+  return ElementStates.Default;
 }
