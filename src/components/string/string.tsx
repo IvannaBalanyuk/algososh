@@ -71,15 +71,11 @@ export const StringComponent: React.FC = () => {
       <ul className={styles.list}>
         {algorithmSteps.length > 0 &&
           algorithmSteps[currentAlgorithmStep].map((letter, index) => {
-            const maxIndex = Math.ceil((values.string.length - 1) / 2);
-            const isFinished = currentAlgorithmStep === maxIndex ? true : false;
             let state = getLetterState(
               index,
               values.string.length - 1,
-              currentAlgorithmStep,
-              isFinished
+              currentAlgorithmStep
             );
-            console.log(currentAlgorithmStep, isFinished, state);
 
             return <Circle letter={letter} key={index} state={state} />;
           })}

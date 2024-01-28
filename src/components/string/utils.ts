@@ -24,9 +24,11 @@ export function getStringReversalSteps(sourceStr: string): string[][] {
 export function getLetterState(
   index: number,
   maxIndex: number,
-  currentStep: number,
-  isFinished: boolean
+  currentStep: number
 ): ElementStates {
+  const maxStepCount= Math.ceil(maxIndex / 2);
+  const isFinished = currentStep === maxStepCount ? true : false;
+  
   if (isFinished) {
     return ElementStates.Default;
   }
