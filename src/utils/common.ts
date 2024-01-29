@@ -3,7 +3,6 @@ import {
   TSetColumnsArrDispatch,
   TSetLettersArrDispatch,
 } from "../types/common";
-import { ElementStates } from "../types/element-states";
 
 export function swap<T>(arr: T[], i: number, j: number) {
   const tmp = arr[i];
@@ -32,36 +31,26 @@ export const setStateWithTimeout = async (
   setState([...stateValue]);
 };
 
-export const getRandomNum = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min)) + min;
+export const getIntFromInterval = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const getRandomNumArr = () => {
-  const arrLength = getRandomNum(3, 17);
+export const getRandomNumArr = (
+  min: number = 0,
+  max: number = 100,
+  minLength: number = 3,
+  maxLength: number = 17) => {
+    const result = new Array(getIntFromInterval(minLength, maxLength)).fill(0);
 
-  let randomArr: number[] = [];
-  let result: TColumnObj[] = [];
-
-  for (let i = 0; i <= arrLength; i++) {
-    randomArr.push(getRandomNum(0, 100));
-  }
-
-  result = randomArr.map((item) => {
-    return {
-      index: item,
-      state: ElementStates.Default,
-    };
-  });
-
-  return result;
+  return Array.from(new Set(result.map(() => getIntFromInterval(min, max))));
 };
 
 export const getRandomStrArr = (min: number, max: number) => {
-  const arrLength = getRandomNum(min, max);
+  const arrLength = getIntFromInterval(min, max);
   let randomArr: string[] = [];
 
   for (let i = 0; i <= arrLength; i++) {
-    randomArr.push(getRandomNum(0, 100).toString());
+    randomArr.push(getIntFromInterval(0, 100).toString());
   }
 
   return randomArr;
