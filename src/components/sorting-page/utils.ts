@@ -7,6 +7,16 @@ export function getBubbleSortSteps(
   direction: Direction = Direction.Ascending
 ): TStep[] {
   const steps: TStep[] = [];
+
+  if (sourceArray.length <= 1) {
+    steps.push({
+      currentArr: [...sourceArray],
+      sortedIndexes: [],
+    });
+    
+    return steps;
+  }
+
   let isElementSwapped;
   let iterationCount = 0;
 
@@ -32,16 +42,17 @@ export function getBubbleSortSteps(
       });
     }
 
-    steps[steps.length - 1].sortedIndexes.push(
+    steps[steps.length - 1]?.sortedIndexes.push(
       sourceArray.length - ++iterationCount
     );
+
   } while (isElementSwapped);
 
   steps.push({
     currentArr: [...sourceArray],
     sortedIndexes: steps[steps.length - 1]?.sortedIndexes || [],
   });
-
+  
   return steps;
 }
 
@@ -50,6 +61,15 @@ export function getSelectionSortSteps(
   direction: Direction = Direction.Ascending
 ): TStep[] {
   const steps: TStep[] = [];
+
+  if (sourceArray.length <= 1) {
+    steps.push({
+      currentArr: [...sourceArray],
+      sortedIndexes: [],
+    });
+    
+    return steps;
+  }
 
   for (let i = 0; i < sourceArray.length - 1; i++) {
     let minIndex = i;
