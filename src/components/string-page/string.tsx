@@ -18,11 +18,11 @@ export const StringComponent: React.FC = () => {
   const [algorithmSteps, setAlgorithmSteps] = useState<string[][]>([]);
   const [currentAlgorithmStep, setCurrentAlgorithmStep] = useState<number>(0);
 
-  const [isLoader, setIsLoader] = useState<boolean>(false);
+  const isAlgorithmInProgress =
+    currentAlgorithmStep < algorithmSteps.length - 1;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoader(true);
 
     const steps = getStringReversalSteps(values.string);
     setAlgorithmSteps(steps);
@@ -41,8 +41,6 @@ export const StringComponent: React.FC = () => {
         });
       }, DELAY_IN_MS);
     }
-
-    setIsLoader(false);
   };
 
   return (
@@ -58,14 +56,15 @@ export const StringComponent: React.FC = () => {
           onChange={handleChange}
           value={values.string}
           name={"string"}
-          disabled={isLoader}
+          disabled={isAlgorithmInProgress}
         />
         <Button
           type={"submit"}
           text={"Развернуть"}
-          isLoader={isLoader}
+          isLoader={isAlgorithmInProgress}
           linkedList={"big"}
           disabled={!values.string}
+          data-testid={"button"}
         />
       </form>
       <ul className={styles.list}>
@@ -77,7 +76,7 @@ export const StringComponent: React.FC = () => {
               currentAlgorithmStep
             );
 
-            return <Circle letter={letter} key={index} state={state} />;
+            return <Circle letter={letter} key={index} data-testid={`circle-${index}`} state={state} />;
           })}
       </ul>
     </SolutionLayout>

@@ -49,6 +49,7 @@ export const FibonacciPage: React.FC = () => {
           isLoader={isLoader}
           linkedList={"big"}
           disabled={!values.string}
+          data-testid={"button"}
         />
       </form>
       <ul className={styles.list}>

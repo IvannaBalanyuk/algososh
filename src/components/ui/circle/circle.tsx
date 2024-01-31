@@ -17,13 +17,14 @@ export const Circle: React.FC<CircleProps> = ({
   state = ElementStates.Default,
   letter,
   head,
-  index, 
+  index,
   tail,
   extraClass = "",
   isSmall,
+  ...rest
 }) => {
   return (
-    <div className={`${styles.content} ${extraClass}`}>
+    <div className={`${styles.content} ${extraClass}`} {...rest}>
       <div
         className={`text text_type_input text_color_input mb-4 ${
           styles.absolute
