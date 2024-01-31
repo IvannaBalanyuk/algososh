@@ -1,5 +1,11 @@
-import { checkButton } from "../utils/button";
+import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
+import { checkButtonForInput } from "../utils/button";
 
-describe("the button is displayed correctly", () => {
-  checkButton("http://localhost:3000", "recursion", "test");
+describe("The button is displayed correctly", () => {
+  checkButtonForInput({
+    path: "http://localhost:3000",
+    href: "recursion",
+    inputValue: "test",
+    delay: SHORT_DELAY_IN_MS
+  });
 });

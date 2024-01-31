@@ -1,4 +1,5 @@
 import { DELAY_IN_MS } from "../../../src/constants/delays";
+import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
 
 describe("the list of circles is displayed correctly", function () {
   const testValue = "iron";
@@ -39,7 +40,7 @@ describe("the list of circles is displayed correctly", function () {
   before(function () {
     cy.visit("http://localhost:3000");
 
-    cy.get('a[href*="recursion"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.recursion}"]`).click();
     cy.get('input[placeholder*="Введите текст"]').type(testValue);
     cy.get('button[data-testid="button"]').click();
   });

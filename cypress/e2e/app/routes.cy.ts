@@ -1,3 +1,5 @@
+import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
+
 describe("app works correctly with routes", function () {
   beforeEach(function () {
     cy.visit("http://localhost:3000");
@@ -8,32 +10,32 @@ describe("app works correctly with routes", function () {
   });
 
   it("should open string-page after recursion link click", function () {
-    cy.get('a[href*="recursion"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.recursion}"]`).click();
     cy.contains(/строка/i);
   });
 
   it("should open fibonacci-page after fibonacci link click", function () {
-    cy.get('a[href*="fibonacci"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.fibonacci}"]`).click();
     cy.contains(/фибоначчи/i);
   });
 
   it("should open sorting-page after sorting link click", function () {
-    cy.get('a[href*="sorting"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.sorting}"]`).click();
     cy.contains(/сортировка/i);
   });
 
   it("should open stack-page after stack link click", function () {
-    cy.get('a[href*="stack"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.stack}"]`).click();
     cy.contains(/стек/i);
   });
 
   it("should open queue-page after queue link click", function () {
-    cy.get('a[href*="queue"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.queue}"]`).click();
     cy.contains(/очередь/i);
   });
 
   it("should open list-page after list link click", function () {
-    cy.get('a[href*="list"]').click();
+    cy.get(`a[href*="${HREF_ATTR_VALUES.list}"]`).click();
     cy.contains(/связный список/i);
   });
 });

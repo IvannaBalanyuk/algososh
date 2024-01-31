@@ -114,6 +114,7 @@ export const StackPage: React.FC = () => {
             text="Добавить"
             isLoader={isLoader && action === Action.Add}
             disabled={!values.string || (isLoader && action !== Action.Add)}
+            data-testid={"addButton"}
           />
           <Button
             type="button"
@@ -121,6 +122,7 @@ export const StackPage: React.FC = () => {
             onClick={deleteHandler}
             isLoader={isLoader && action === Action.Delete}
             disabled={stackState.items.length === 0 || (isLoader && action !== Action.Delete)}
+            data-testid={"deleteButton"}
           />
         </form>
         <Button
@@ -129,6 +131,7 @@ export const StackPage: React.FC = () => {
           onClick={clearHandler}
           isLoader={isLoader && action === Action.Clear}
           disabled={stackState.items.length === 0 || (isLoader && action !== Action.Clear)}
+          data-testid={"clearButton"}
         />
       </div>
       <ul className={styles.list}>
@@ -145,6 +148,7 @@ export const StackPage: React.FC = () => {
                     ? ElementStates.Changing
                     : ElementStates.Default
                 }
+                data-testid={`circle-${index}`}
               />
             );
           })}
