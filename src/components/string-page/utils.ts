@@ -27,19 +27,11 @@ export function getLetterState(
   currentStep: number
 ): ElementStates {
   const maxStepCount = Math.ceil(maxIndex / 2);
-  const isFinished = currentStep === maxStepCount ? true : false;
+  if (currentStep === maxStepCount) return ElementStates.Default;
 
-  if (isFinished) {
-    return ElementStates.Default;
-  }
+  if (index < currentStep || index > maxIndex - currentStep) return ElementStates.Modified;
 
-  if (index < currentStep || index > maxIndex - currentStep) {
-    return ElementStates.Modified;
-  }
-
-  if (index === currentStep || index === maxIndex - currentStep) {
-    return ElementStates.Changing;
-  }
+  if (index === currentStep || index === maxIndex - currentStep) return ElementStates.Changing;
 
   return ElementStates.Default;
 }

@@ -1,34 +1,5 @@
-import {
-  TColumnObj,
-  TSetColumnsArrDispatch,
-  TSetLettersArrDispatch,
-} from "../types/common";
-
-export function swap<T>(arr: T[], i: number, j: number) {
-  const tmp = arr[i];
-
-  arr[i] = arr[j];
-  arr[j] = tmp;
-}
-
-export function swapIndexes(arr: TColumnObj[], i: number, j: number) {
-  const tmp = arr[i].index;
-
-  arr[i].index = arr[j].index;
-  arr[j].index = tmp;
-}
-
 export const setTimeoutPromise = async (delay: number) => {
   return new Promise((func) => setTimeout(func, delay));
-};
-
-export const setStateWithTimeout = async (
-  setState: React.Dispatch<React.SetStateAction<any>>,
-  delay: number,
-  stateValue: TSetLettersArrDispatch | TSetColumnsArrDispatch
-) => {
-  await setTimeoutPromise(delay);
-  setState([...stateValue]);
 };
 
 export const getIntFromInterval = (min: number, max: number) => {
