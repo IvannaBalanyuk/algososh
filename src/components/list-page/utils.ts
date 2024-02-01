@@ -129,12 +129,11 @@ export class LinkedList<T> implements LinkedListType<T> {
     if (index < 0 || index > this.size) {
       throw new Error("Enter a valid index");
     }
-    console.log(index);
 
     if (this.head) {
       let curr: LinkedListNode<T> = this.head;
       let prev: LinkedListNode<T> = curr;
-      let currIndex = 1;
+      let currIndex = 0;
 
       if (index === 0) {
         this.head = curr.next;

@@ -21,7 +21,5 @@ export function getFibonacciSequence(count: number): number[] {
     fibonacciNumbers.push(firstNum + secondNum);
   }
 
-  console.log(fibonacciNumbers);
-
   return fibonacciNumbers;
 }

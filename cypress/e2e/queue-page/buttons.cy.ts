@@ -1,10 +1,10 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
 import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
 import { TEST_IDS } from "../../../src/constants/test-ids";
-import { checkButtonForInput, checkDeleteOrClearBtn } from "../utils/button";
+import { checkAddButton, checkDeleteOrClearBtn } from "../utils/button";
 
 describe("The add button is displayed correctly", () => {
-  checkButtonForInput({
+  checkAddButton({
     path: "/",
     href: HREF_ATTR_VALUES.queue,
     inputValue: "5",
