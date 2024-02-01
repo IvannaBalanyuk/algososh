@@ -12,6 +12,7 @@ exports[`Компонент Circle рендерится без ошибок бе
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -35,6 +36,7 @@ exports[`Компонент Circle рендерится без ошибок в �
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -58,6 +60,7 @@ exports[`Компонент Circle рендерится без ошибок в �
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -81,6 +84,7 @@ exports[`Компонент Circle рендерится без ошибок в �
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -106,6 +110,7 @@ exports[`Компонент Circle рендерится без ошибок с h
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -129,6 +134,7 @@ exports[`Компонент Circle рендерится без ошибок с i
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -160,6 +166,7 @@ exports[`Компонент Circle рендерится без ошибок с r
       >
         <p
           className="text text_type_circle text_color_input letter"
+          data-testid="letter"
         >
           F
         </p>
@@ -177,6 +184,7 @@ exports[`Компонент Circle рендерится без ошибок с r
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -200,6 +208,7 @@ exports[`Компонент Circle рендерится без ошибок с r
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -219,6 +228,7 @@ exports[`Компонент Circle рендерится без ошибок с r
       >
         <p
           className="text text_type_circle text_color_input letter"
+          data-testid="letter"
         >
           F
         </p>
@@ -246,6 +256,7 @@ exports[`Компонент Circle рендерится без ошибок с t
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
@@ -271,6 +282,7 @@ exports[`Компонент Circle рендерится без ошибок с �
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     >
       F
     </p>
@@ -296,6 +308,7 @@ exports[`Компонент Circle рендерится без ошибок с �
   >
     <p
       className="text text_type_circle text_color_input letter"
+      data-testid="letter"
     />
   </div>
   <p
