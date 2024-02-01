@@ -8,6 +8,7 @@ import { ElementStates } from "../../types/element-states";
 import { Circle } from "../ui/circle/circle";
 import { getFibonacciSequence } from "./utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { TEST_IDS } from "../../constants/test-ids";
 
 export const FibonacciPage: React.FC = () => {
   const { values, handleChange } = useForm({
@@ -74,7 +75,7 @@ export const FibonacciPage: React.FC = () => {
           isLoader={isAlgorithmInProgress}
           linkedList={"big"}
           disabled={!values.string}
-          data-testid={"button"}
+          data-testid={TEST_IDS.button}
         />
       </form>
       <ul className={styles.list}>

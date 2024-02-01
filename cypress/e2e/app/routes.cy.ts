@@ -2,7 +2,7 @@ import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
 
 describe("app works correctly with routes", function () {
   beforeEach(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
   });
 
   it("should open mane-page by default", function () {

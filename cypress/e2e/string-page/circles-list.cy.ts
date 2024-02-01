@@ -38,7 +38,7 @@ describe("the list of circles is displayed correctly", function () {
   }
 
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
 
     cy.get(`a[href*="${HREF_ATTR_VALUES.recursion}"]`).click();
     cy.get('input[placeholder*="Введите текст"]').type(testValue);

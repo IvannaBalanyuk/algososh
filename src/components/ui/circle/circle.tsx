@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./circle.module.css";
 import { ElementStates } from "../../../types/element-states";
+import { TEST_IDS } from "../../../constants/test-ids";
 
 interface CircleProps {
   state?: ElementStates;
@@ -40,7 +41,7 @@ export const Circle: React.FC<CircleProps> = ({
         }`}
       >
         <p
-          className={`text text_type_circle text_color_input ${styles.letter}`}
+          className={`text text_type_circle text_color_input ${styles.letter}`} data-testid={TEST_IDS.letter}
         >
           {letter}
         </p>

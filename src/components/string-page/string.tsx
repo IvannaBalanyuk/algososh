@@ -7,6 +7,7 @@ import { Circle } from "../ui/circle/circle";
 import useForm from "../../hooks/useForm";
 import { getLetterState, getStringReversalSteps } from "./utils";
 import { DELAY_IN_MS } from "../../constants/delays";
+import { TEST_IDS } from "../../constants/test-ids";
 
 export const StringComponent: React.FC = () => {
   const { values, handleChange } = useForm({
@@ -64,7 +65,7 @@ export const StringComponent: React.FC = () => {
           isLoader={isAlgorithmInProgress}
           linkedList={"big"}
           disabled={!values.string}
-          data-testid={"button"}
+          data-testid={TEST_IDS.button}
         />
       </form>
       <ul className={styles.list}>

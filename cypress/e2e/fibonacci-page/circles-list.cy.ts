@@ -1,5 +1,6 @@
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
 import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
+import { TEST_IDS } from "../../../src/constants/test-ids";
 
 describe("the list of circles is displayed correctly", function () {
   const testValue = '4';
@@ -16,11 +17,11 @@ describe("the list of circles is displayed correctly", function () {
   }
 
   before(function () {
-    cy.visit("http://localhost:3000");
+    cy.visit("/");
 
     cy.get(`a[href*="${HREF_ATTR_VALUES.fibonacci}"]`).click();
     cy.get('input[placeholder*="Введите текст"]').type(testValue);
-    cy.get('button[data-testid="button"]').click();
+    cy.get(`button[data-testid="${TEST_IDS.button}"]`).click();
   });
 
   it("the list of circles is displayed correctly at all steps of the algorithm", function () {

@@ -6,7 +6,7 @@ import { checkButtonForInput, checkDeleteOrClearBtn } from "../utils/button";
 describe("The add button is displayed correctly", () => {
   checkButtonForInput({
     path: "/",
-    href: HREF_ATTR_VALUES.stack,
+    href: HREF_ATTR_VALUES.queue,
     inputValue: "5",
     btnTestId: TEST_IDS.addButton,
     delay: SHORT_DELAY_IN_MS / 2
@@ -16,7 +16,7 @@ describe("The add button is displayed correctly", () => {
 describe("The delete button is displayed correctly", () => {
   checkDeleteOrClearBtn({
     path: "/",
-    href: HREF_ATTR_VALUES.stack,
+    href: HREF_ATTR_VALUES.queue,
     btnTestId: TEST_IDS.deleteButton,
     delay: SHORT_DELAY_IN_MS / 2
   });
@@ -25,7 +25,7 @@ describe("The delete button is displayed correctly", () => {
 describe("The clear button is displayed correctly", () => {
   checkDeleteOrClearBtn({
     path: "/",
-    href: HREF_ATTR_VALUES.stack,
+    href: HREF_ATTR_VALUES.queue,
     btnTestId: TEST_IDS.clearButton,
     delay: SHORT_DELAY_IN_MS / 2
   });

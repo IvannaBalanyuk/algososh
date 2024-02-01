@@ -1,3 +1,6 @@
+import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
+import { TEST_IDS } from "../../../src/constants/test-ids";
+
 interface TParams {
   path: string,
   href: string,
@@ -15,7 +18,7 @@ export function checkButtonForInput({
   href,
   inputPlaceholder = "Введите текст",
   inputValue,
-  btnTestId = "button",
+  btnTestId = TEST_IDS.button,
   delay}: TParamsWithInputValue
 ) {
   beforeEach(function () {
@@ -48,7 +51,7 @@ export function checkButtonForInput({
 export function checkDeleteOrClearBtn({
   path,
   href,
-  btnTestId = "button",
+  btnTestId = TEST_IDS.button,
   delay}: TParams
 ) {
   beforeEach(function () {
@@ -59,25 +62,31 @@ export function checkDeleteOrClearBtn({
     cy.get(`button[data-testid="addButton"]`).as("addButton");
   });
 
-  it("the delete button is disabled when the list is empty", function () {
-    cy.get("ul").children().should("have.length", 0);
+  it("the button is disabled when the list is empty", function () {
+    if (href === HREF_ATTR_VALUES.queue) {
+      cy.get(`p[data-testid="${TEST_IDS.letter}"]`).should("be.empty");
+    } else {
+      cy.get("ul").children().should("have.length", 0);
+    }
     cy.get("@targetButton").should("be.disabled");
   });
 
-  it("the delete button is not disabled when the list is not empty", function () {
-    cy.get("@input").type("1");
+  it("the button is not disabled when the list is not empty", function () {
+    cy.get("@input").type("42");
     cy.get("@addButton").click();
     cy.get("@targetButton").should("not.be.disabled");
   });
 
-  it("the delete button has a loader when the deleting algorithm in progress", function () {
-    cy.get("@input").type("1");
+  it("the button has a loader when the algorithm in progress", function () {
+    cy.get("@input").type("42");
     cy.get("@addButton").click();
 
     cy.clock();
+    
     cy.get("@targetButton").click();
     cy.tick(delay);
     cy.get("@targetButton").children("img[class^=button_loader_icon]");
+
     cy.clock().invoke("restore");
   });
 }
