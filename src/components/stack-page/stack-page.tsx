@@ -123,7 +123,7 @@ export const StackPage: React.FC = () => {
             onClick={deleteHandler}
             isLoader={isLoader && action === Action.Delete}
             disabled={stackState.items.length === 0 || (isLoader && action !== Action.Delete)}
-            data-testid={TEST_IDS.deleteButton}
+            data-testid={TEST_IDS.delButton}
           />
         </form>
         <Button

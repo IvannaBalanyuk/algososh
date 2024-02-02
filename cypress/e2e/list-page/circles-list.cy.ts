@@ -1,6 +1,24 @@
+/// <reference types="cypress" />
+// @ts-check
+
+import {
+  CHANGING_BORDER_STYLE,
+  DEFAULT_BORDER_STYLE,
+  MODIFIED_BORDER_STYLE,
+} from "../../../src/constants/border-styles";
+import {
+  A_HREF_LIST,
+  BUTTON_TEST_ID_ADD_BY_INDEX_BTN,
+  BUTTON_TEST_ID_ADD_TO_HEAD_BTN,
+  BUTTON_TEST_ID_ADD_TO_TAIL_BTN,
+  BUTTON_TEST_ID_DEL_BY_INDEX_BTN,
+  BUTTON_TEST_ID_DEL_FROM_HEAD_BTN,
+  BUTTON_TEST_ID_DEL_FROM_TAIL_BTN,
+  DIV_CLASS_CIRCLE_CIRCLE,
+  INPUT_PLACEHOLDER_ENTER_INDEX,
+  INPUT_PLACEHOLDER_ENTER_TEXT,
+} from "../../../src/constants/cy-selectors";
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
-import { TEST_IDS } from "../../../src/constants/test-ids";
 
 interface TCheckActionsWithHeadAndTail {
   length: number;
@@ -19,10 +37,6 @@ interface TCheckActionsWithIndex {
 }
 
 describe("the list of circles is displayed correctly", function () {
-  const defaultBorderStyle = "4px solid rgb(0, 50, 255)";
-  const changingBorderStyle = "4px solid rgb(210, 82, 225)";
-  const modifiedBorderStyle = "4px solid rgb(127, 224, 81)";
-
   let testLength = 4;
   let testHeadIndex = 0;
   let testTailIndex = 3;
@@ -59,13 +73,13 @@ describe("the list of circles is displayed correctly", function () {
         algorithmType === "addToHead" ? i === headInd + 1 : i === tailInd - 1;
 
       cy.get(`div[data-testid="circle-${i}"]`)
-        .children("div[class^=circle_circle]")
+        .children(DIV_CLASS_CIRCLE_CIRCLE)
         .as("circle");
       cy.get("@circle").next().should("contain.text", `${i}`);
 
       if (!isTargetMarkedItem) {
         cy.get("@circle").children().should("not.be.empty");
-        cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+        cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
       }
 
       if (isNotTargetMarkedItem) {
@@ -85,20 +99,20 @@ describe("the list of circles is displayed correctly", function () {
 
       if (isTargetMarkedItem) {
         if (algorithmStep === "first") {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
 
           if (algorithmType === "addToHead" || algorithmType === "addToTail") {
             cy.get("@circle").children().should("not.be.empty");
             cy.get("@circle")
               .prev()
-              .find("div[class^=circle_circle]")
+              .find(DIV_CLASS_CIRCLE_CIRCLE)
               .as("targetMarkCircle");
           } else {
             cy.get("@circle").children().should("be.empty");
             cy.get("@circle")
               .next()
               .next()
-              .find("div[class^=circle_circle]")
+              .find(DIV_CLASS_CIRCLE_CIRCLE)
               .as("targetMarkCircle");
           }
 
@@ -106,19 +120,19 @@ describe("the list of circles is displayed correctly", function () {
           cy.get("@targetMarkCircle").should(
             "have.css",
             "border",
-            changingBorderStyle
+            CHANGING_BORDER_STYLE
           );
         }
 
         if (algorithmStep === "second") {
           cy.get("@circle").children().should("not.be.empty");
-          cy.get("@circle").should("have.css", "border", modifiedBorderStyle);
+          cy.get("@circle").should("have.css", "border", MODIFIED_BORDER_STYLE);
           cy.get("@circle").siblings().should("contain.text", targetMarkText);
         }
 
         if (algorithmStep === "finish") {
           cy.get("@circle").children().should("not.be.empty");
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
           cy.get("@circle").siblings().should("contain.text", targetMarkText);
         }
       }
@@ -143,7 +157,7 @@ describe("the list of circles is displayed correctly", function () {
       const isCurrentStepIndex = i === currStepIndex;
 
       cy.get(`div[data-testid="circle-${i}"]`)
-        .children("div[class^=circle_circle]")
+        .children(DIV_CLASS_CIRCLE_CIRCLE)
         .as("circle");
       cy.get("@circle").children().should("not.be.empty");
       cy.get("@circle").next().should("contain.text", `${i}`);
@@ -161,43 +175,43 @@ describe("the list of circles is displayed correctly", function () {
       if (!isFinishStep && !isPreFinishStep) {
         // check already walked indexes state
         if (i < stepCount) {
-          cy.get("@circle").should("have.css", "border", changingBorderStyle);
+          cy.get("@circle").should("have.css", "border", CHANGING_BORDER_STYLE);
         } else {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
         }
 
         if (isCurrentStepIndex) {
           cy.get("@circle")
             .prev()
-            .find("div[class^=circle_circle]")
+            .find(DIV_CLASS_CIRCLE_CIRCLE)
             .as("headCircle");
 
           cy.get("@headCircle").should("contain.text", `${textInputValue}`);
           cy.get("@headCircle").should(
             "have.css",
             "border",
-            changingBorderStyle
+            CHANGING_BORDER_STYLE
           );
         }
       }
 
       if (isPreFinishStep) {
         if (isCurrentStepIndex) {
-          cy.get("@circle").should("have.css", "border", modifiedBorderStyle);
+          cy.get("@circle").should("have.css", "border", MODIFIED_BORDER_STYLE);
           cy.get("@circle").should("contain.text", `${textInputValue}`);
           cy.get("@circle").prev().should("be.empty");
         } else {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
         }
       }
 
       if (isFinishStep) {
         if (isCurrentStepIndex) {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
           cy.get("@circle").should("contain.text", `${textInputValue}`);
           cy.get("@circle").prev().should("be.empty");
         } else {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
         }
       }
     }
@@ -220,7 +234,7 @@ describe("the list of circles is displayed correctly", function () {
       const isTailEqTargetIndex = tailIndex === indexInputValue;
 
       cy.get(`div[data-testid="circle-${i}"]`)
-        .children("div[class^=circle_circle]")
+        .children(DIV_CLASS_CIRCLE_CIRCLE)
         .as("circle");
       cy.get("@circle").next().should("contain.text", `${i}`);
 
@@ -242,9 +256,9 @@ describe("the list of circles is displayed correctly", function () {
 
         // check already walked indexes state
         if (i < stepCount) {
-          cy.get("@circle").should("have.css", "border", changingBorderStyle);
+          cy.get("@circle").should("have.css", "border", CHANGING_BORDER_STYLE);
         } else {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
         }
       }
 
@@ -255,24 +269,24 @@ describe("the list of circles is displayed correctly", function () {
           cy.get("@circle")
             .next()
             .next()
-            .find("div[class^=circle_circle]")
+            .find(DIV_CLASS_CIRCLE_CIRCLE)
             .as("tailCircle");
           cy.get("@tailCircle").should("not.be.empty");
           cy.get("@tailCircle").should(
             "have.css",
             "border",
-            changingBorderStyle
+            CHANGING_BORDER_STYLE
           );
         } else {
           cy.get("@circle").children().should("not.be.empty");
         }
 
-        cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+        cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
       }
 
       if (isFinishStep) {
         cy.get("@circle").children().should("not.be.empty");
-        cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+        cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
 
         if (i === tailIndex) {
           cy.get("@circle").siblings().should("contain.text", "tail");
@@ -284,23 +298,15 @@ describe("the list of circles is displayed correctly", function () {
   beforeEach(function () {
     cy.visit("/");
 
-    cy.get(`a[href*="${HREF_ATTR_VALUES.list}"]`).click();
-    cy.get(`input[placeholder="Введите текст"]`).as("textInput");
-    cy.get(`input[placeholder="Введите индекс"]`).as("indexInput");
-    cy.get(`button[data-testid="${TEST_IDS.addToHeadBtn}"]`).as("addToHeadBtn");
-    cy.get(`button[data-testid="${TEST_IDS.addToTailBtn}"]`).as("addToTailBtn");
-    cy.get(`button[data-testid="${TEST_IDS.deleteFromHeadBtn}"]`).as(
-      "deleteFromHeadBtn"
-    );
-    cy.get(`button[data-testid="${TEST_IDS.deleteFromTailBtn}"]`).as(
-      "deleteFromTailBtn"
-    );
-    cy.get(`button[data-testid="${TEST_IDS.addByIndexBtn}"]`).as(
-      "addByIndexBtn"
-    );
-    cy.get(`button[data-testid="${TEST_IDS.deleteByIndexBtn}"]`).as(
-      "deleteByIndexBtn"
-    );
+    cy.get(A_HREF_LIST).click();
+    cy.get(INPUT_PLACEHOLDER_ENTER_TEXT).as("textInput");
+    cy.get(INPUT_PLACEHOLDER_ENTER_INDEX).as("indexInput");
+    cy.get(BUTTON_TEST_ID_ADD_TO_HEAD_BTN).as("addToHeadBtn");
+    cy.get(BUTTON_TEST_ID_ADD_TO_TAIL_BTN).as("addToTailBtn");
+    cy.get(BUTTON_TEST_ID_DEL_FROM_HEAD_BTN).as("delFromHeadBtn");
+    cy.get(BUTTON_TEST_ID_DEL_FROM_TAIL_BTN).as("delFromTailBtn");
+    cy.get(BUTTON_TEST_ID_ADD_BY_INDEX_BTN).as("addByIndexBtn");
+    cy.get(BUTTON_TEST_ID_DEL_BY_INDEX_BTN).as("delByIndexBtn");
   });
 
   afterEach(function () {
@@ -317,11 +323,11 @@ describe("the list of circles is displayed correctly", function () {
       const isTailItem = i === testTailIndex;
 
       cy.get(`div[data-testid="circle-${i}"]`)
-        .children("div[class^=circle_circle]")
+        .children(DIV_CLASS_CIRCLE_CIRCLE)
         .as("circle");
       cy.get("@circle").children().should("not.be.empty");
       cy.get("@circle").siblings().contains(`${i}`);
-      cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+      cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
 
       if (isHeadItem) {
         cy.get("@circle").siblings().contains("head");
@@ -419,7 +425,7 @@ describe("the list of circles is displayed correctly", function () {
     cy.clock();
 
     // delete item from head
-    cy.get("@deleteFromHeadBtn").click();
+    cy.get("@delFromHeadBtn").click();
 
     // check state at first step of algorithm
     checkStepsState({
@@ -449,7 +455,7 @@ describe("the list of circles is displayed correctly", function () {
     cy.clock();
 
     // delete item from tail
-    cy.get("@deleteFromTailBtn").click();
+    cy.get("@delFromTailBtn").click();
 
     // check state at first step of algorithm
     checkStepsState({
@@ -484,7 +490,7 @@ describe("the list of circles is displayed correctly", function () {
     let currentStepCount = 0;
 
     // add item by index
-    cy.get("@textInput").type(`${testInputText}`);
+    cy.get("@textInput").type(testInputText);
     cy.get("@indexInput").type(`${testInputIndex}`);
     cy.get("@addByIndexBtn").click();
 
@@ -516,7 +522,7 @@ describe("the list of circles is displayed correctly", function () {
 
     // add item by index
     cy.get("@indexInput").type(`${testInputIndex}`);
-    cy.get("@deleteByIndexBtn").click();
+    cy.get("@delByIndexBtn").click();
 
     // check state at all steps of algorithm
     while (currentStepCount < maxStepCount) {

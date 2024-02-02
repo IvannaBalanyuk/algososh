@@ -1,9 +1,21 @@
+/// <reference types="cypress" />
+// @ts-check
+
+import {
+  CHANGING_BORDER_STYLE,
+  DEFAULT_BORDER_STYLE,
+} from "../../../src/constants/border-styles";
+import {
+  A_HREF_STACK,
+  BUTTON_TEST_ID_ADD_BTN,
+  BUTTON_TEST_ID_CLEAR_BTN,
+  BUTTON_TEST_ID_DEL_BTN,
+  DIV_CLASS_CIRCLE_CIRCLE,
+  INPUT_PLACEHOLDER_ENTER_TEXT,
+} from "../../../src/constants/cy-selectors";
 import { SHORT_DELAY_IN_MS } from "../../../src/constants/delays";
-import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
 
 describe("the list of circles is displayed correctly", function () {
-  const defaultBorderStyle = "4px solid rgb(0, 50, 255)";
-  const changingBorderStyle = "4px solid rgb(210, 82, 225)";
   const testArr = [13, 42, 73];
   let currentCount = 0;
 
@@ -16,17 +28,17 @@ describe("the list of circles is displayed correctly", function () {
     for (let i = 0; i < count; i++) {
       if (isAlgorithmInProgress) {
         cy.get(`div[data-testid="circle-${i}"]`)
-          .children("div[class^=circle_circle]")
+          .children(DIV_CLASS_CIRCLE_CIRCLE)
           .as("circle");
         cy.get("@circle").children().contains(testArr[i]);
         cy.get("@circle").next().contains(`${i}`);
 
         const isLastCircle = i === count - 1;
         if (isAlgorithmInProgress && isLastCircle) {
-          cy.get("@circle").should("have.css", "border", changingBorderStyle);
+          cy.get("@circle").should("have.css", "border", CHANGING_BORDER_STYLE);
           cy.get("@circle").prev().contains("top");
         } else {
-          cy.get("@circle").should("have.css", "border", defaultBorderStyle);
+          cy.get("@circle").should("have.css", "border", DEFAULT_BORDER_STYLE);
         }
       }
     }
@@ -35,11 +47,11 @@ describe("the list of circles is displayed correctly", function () {
   beforeEach(function () {
     cy.visit("/");
 
-    cy.get(`a[href*="${HREF_ATTR_VALUES.stack}"]`).click();
-    cy.get(`input[placeholder="Введите текст"]`).as("input");
-    cy.get(`button[data-testid="addButton"]`).as("addButton");
-    cy.get(`button[data-testid="deleteButton"]`).as("deleteButton");
-    cy.get(`button[data-testid="clearButton"]`).as("clearButton");
+    cy.get(A_HREF_STACK).click();
+    cy.get(INPUT_PLACEHOLDER_ENTER_TEXT).as("input");
+    cy.get(BUTTON_TEST_ID_ADD_BTN).as("addButton");
+    cy.get(BUTTON_TEST_ID_DEL_BTN).as("deleteButton");
+    cy.get(BUTTON_TEST_ID_CLEAR_BTN).as("clearButton");
   });
 
   it("the list of circles is displayed correctly at all steps of the adding and deleting algorithms", function () {

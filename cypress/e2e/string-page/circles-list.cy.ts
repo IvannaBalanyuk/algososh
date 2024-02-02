@@ -1,5 +1,18 @@
+/// <reference types="cypress" />
+// @ts-check
+
+import {
+  CHANGING_BORDER_STYLE,
+  DEFAULT_BORDER_STYLE,
+  MODIFIED_BORDER_STYLE,
+} from "../../../src/constants/border-styles";
+import {
+  A_HREF_RECURSION,
+  BUTTON_TEST_ID_BTN,
+  DIV_CLASS_CIRCLE_CIRCLE,
+  INPUT_PLACEHOLDER_ENTER_TEXT,
+} from "../../../src/constants/cy-selectors";
 import { DELAY_IN_MS } from "../../../src/constants/delays";
-import { HREF_ATTR_VALUES } from "../../../src/constants/href-attribute-values";
 
 describe("the list of circles is displayed correctly", function () {
   const testValue = "iron";
@@ -8,22 +21,24 @@ describe("the list of circles is displayed correctly", function () {
     ["n", "r", "o", "i"],
     ["n", "o", "r", "i"],
   ];
-  
+
   let stepsCount = 0;
 
-  const defaultBorderStyle = "4px solid rgb(0, 50, 255)";
-  const changingBorderStyle = "4px solid rgb(210, 82, 225)";
-  const modifiedBorderStyle = "4px solid rgb(127, 224, 81)";
-
-  function getBorderStyle(index: number, maxIndex: number, currentStep: number): string {
+  function getBorderStyle(
+    index: number,
+    maxIndex: number,
+    currentStep: number
+  ): string {
     const maxStepCount = Math.ceil(maxIndex / 2);
-    if (currentStep === maxStepCount) return defaultBorderStyle;
+    if (currentStep === maxStepCount) return DEFAULT_BORDER_STYLE;
 
-    if (index < currentStep || index > maxIndex - currentStep) return modifiedBorderStyle;
+    if (index < currentStep || index > maxIndex - currentStep)
+      return MODIFIED_BORDER_STYLE;
 
-    if (index === currentStep || index === maxIndex - currentStep) return changingBorderStyle;
+    if (index === currentStep || index === maxIndex - currentStep)
+      return CHANGING_BORDER_STYLE;
 
-    return defaultBorderStyle;
+    return DEFAULT_BORDER_STYLE;
   }
 
   function checkCirclesListState(listLength: number, stepsCount: number) {
@@ -32,7 +47,7 @@ describe("the list of circles is displayed correctly", function () {
     for (let i = 0; i < listLength; i++) {
       const borderStyle = getBorderStyle(i, listLength - 1, stepsCount);
       cy.get(`div[data-testid="circle-${i}"]`)
-        .children("div[class^=circle_circle]")
+        .children(DIV_CLASS_CIRCLE_CIRCLE)
         .should("have.css", "border", borderStyle);
     }
   }
@@ -40,9 +55,9 @@ describe("the list of circles is displayed correctly", function () {
   before(function () {
     cy.visit("/");
 
-    cy.get(`a[href*="${HREF_ATTR_VALUES.recursion}"]`).click();
-    cy.get('input[placeholder*="Введите текст"]').type(testValue);
-    cy.get('button[data-testid="button"]').click();
+    cy.get(A_HREF_RECURSION).click();
+    cy.get(INPUT_PLACEHOLDER_ENTER_TEXT).type(testValue);
+    cy.get(BUTTON_TEST_ID_BTN).click();
   });
 
   it("the list of circles is displayed correctly at all steps of the algorithm", function () {

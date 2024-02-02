@@ -12,6 +12,7 @@ import { getRandomStrArr, setTimeoutPromise } from "../../utils/common";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { TEST_IDS } from "../../constants/test-ids";
+import { ENTER_INDEX, ENTER_TEXT } from "../../constants/placeholders";
 
 type TListState = {
   items: string[];
@@ -297,7 +298,7 @@ export const ListPage: React.FC = () => {
               listState.items.length === 0 ||
               (isLoader && action !== Action.DeleteFromHead)
             }
-            data-testid={TEST_IDS.deleteFromHeadBtn}
+            data-testid={TEST_IDS.delFromHeadBtn}
           />
           <Button
             type="button"
@@ -309,12 +310,12 @@ export const ListPage: React.FC = () => {
               listState.items.length === 0 ||
               (isLoader && action !== Action.DeleteFromTail)
             }
-            data-testid={TEST_IDS.deleteFromTailBtn}
+            data-testid={TEST_IDS.delFromTailBtn}
           />
         </div>
         <div className={styles.wrapper}>
           <Input
-            placeholder="Введите индекс"
+            placeholder={ENTER_INDEX}
             type="number"
             maxLength={1}
             extraClass={styles.input}
@@ -353,7 +354,7 @@ export const ListPage: React.FC = () => {
               !isIndexValid(values.index) ||
               (isLoader && action !== Action.DeleteByIndex)
             }
-            data-testid={TEST_IDS.deleteByIndexBtn}
+            data-testid={TEST_IDS.delByIndexBtn}
           />
         </div>
       </div>
