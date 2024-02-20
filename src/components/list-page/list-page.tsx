@@ -12,7 +12,7 @@ import { getRandomStrArr, setTimeoutPromise } from "../../utils/common";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { TEST_IDS } from "../../constants/test-ids";
-import { ENTER_INDEX, ENTER_TEXT } from "../../constants/placeholders";
+import { ENTER_INDEX } from "../../constants/placeholders";
 
 type TListState = {
   items: string[];
