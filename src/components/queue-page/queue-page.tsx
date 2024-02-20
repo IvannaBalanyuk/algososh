@@ -10,11 +10,13 @@ import { Action } from "../../types/action";
 import useForm from "../../hooks/useForm";
 import { setTimeoutPromise } from "../../utils/common";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { TEST_IDS } from "../../constants/test-ids";
 
 const queue = new Queue<string>();
 
 type TQueueState = {
   items: (string | undefined)[];
+  fillItemsCount: number;
   tailIndex: number | null;
   headIndex: number | null;
   addIndex: number | null;
@@ -24,6 +26,7 @@ type TQueueState = {
 export const QueuePage: React.FC = () => {
   const [queueState, setQueueState] = useState<TQueueState>({
     items: queue.getItems(),
+    fillItemsCount: 0,
     tailIndex: null,
     headIndex: null,
     addIndex: null,
@@ -44,6 +47,10 @@ export const QueuePage: React.FC = () => {
 
     if (values.string) {
       queue.enqueue(values.string);
+      setQueueState({
+        ...queueState,
+        fillItemsCount: ++queueState.fillItemsCount,
+      });
     }
     setQueueState({
       ...queueState,
@@ -75,6 +82,7 @@ export const QueuePage: React.FC = () => {
     setQueueState({
       ...queueState,
       deletedIndex: queue.getHead(),
+      fillItemsCount: --queueState.fillItemsCount,
     });
     await setTimeoutPromise(SHORT_DELAY_IN_MS);
     setQueueState({
@@ -94,14 +102,18 @@ export const QueuePage: React.FC = () => {
     setAction(null);
   };
 
-  const clearHandler = () => {
+  const clearHandler = async () => {
     setAction(Action.Clear);
     setIsLoader(true);
 
     queue.clear();
+    
+    await setTimeoutPromise(SHORT_DELAY_IN_MS);
+    
     setQueueState({
       ...queueState,
       items: queue.getItems(),
+      fillItemsCount: 0,
       tailIndex: queue.getTail(),
       headIndex: queue.getHead(),
     });
@@ -127,13 +139,15 @@ export const QueuePage: React.FC = () => {
             text="Добавить"
             isLoader={isLoader && action === Action.Add}
             disabled={!values.string || (isLoader && action !== Action.Add)}
+            data-testid={TEST_IDS.addButton}
           />
           <Button
             type="button"
             text="Удалить"
             onClick={deleteHandler}
             isLoader={isLoader && action === Action.Delete}
-            disabled={isLoader && action !== Action.Delete}
+            disabled={queueState.fillItemsCount === 0 || (isLoader && action !== Action.Delete)}
+            data-testid={TEST_IDS.delButton}
           />
         </form>
         <Button
@@ -141,7 +155,8 @@ export const QueuePage: React.FC = () => {
           text="Очистить"
           onClick={clearHandler}
           isLoader={isLoader && action === Action.Clear}
-          disabled={isLoader && action !== Action.Clear}
+          disabled={queueState.fillItemsCount === 0 || (isLoader && action !== Action.Clear)}
+          data-testid={TEST_IDS.clearButton}
         />
       </div>
       <ul className={styles.list}>
@@ -160,6 +175,7 @@ export const QueuePage: React.FC = () => {
                     : ElementStates.Default
                 }
                 tail={index === queueState.tailIndex ? "tail" : null}
+                data-testid={`circle-${index}`}
               />
             );
           })}

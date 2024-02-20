@@ -1,40 +1,25 @@
-import { TSetLettersArrDispatch, TLetterObj } from "../../types/common";
-import { setStateWithTimeout } from "../../utils/common";
-
-export async function getFibonacciSequence(
-  string: string | null,
-  setLettersArr: React.Dispatch<React.SetStateAction<TSetLettersArrDispatch>>
-) {
-  const lettersArr: TLetterObj[] = [];
-
-  let index = 0;
-  let firstNum = 1;
-  let secondNum = 1;
-
-  while (index <= Number(string)) {
-    let letterObj: TLetterObj | null = null;
-
-    if (index === 0 || index === 1) {
-      letterObj = {
-        letter: '1',
-        index: index,
-        state: "default",
-      };
-    } else {
-      letterObj = {
-        letter: (firstNum + secondNum).toString(),
-        index: index,
-        state: "default",
-      };
-      let temp = firstNum;
-      firstNum = secondNum;
-      secondNum = temp + secondNum;
-    }
-    
-    index++;
-
-    // Добавление в массив нового элемента и отрисовка обновленного массива
-    lettersArr.push(letterObj);
-    await setStateWithTimeout(setLettersArr, 500, lettersArr);
+export function getFibonacciSequence(count: number): number[] {
+  if(count < 0 || count > 19) {
+    throw new Error(
+      "Введено недопустимое значение. Допустимые значения - от 0 до 19 включительно"
+    );
   }
+
+  if (count === 0) {
+    return [1];
+  }
+
+  if (count === 1) {
+    return [1, 1];
+  }
+
+  const fibonacciNumbers: number[] = [1, 1];
+
+  for (let i = 2; i <= count; i++) {
+    const firstNum = fibonacciNumbers[i - 1];
+    const secondNum = fibonacciNumbers[i - 2];
+    fibonacciNumbers.push(firstNum + secondNum);
+  }
+
+  return fibonacciNumbers;
 }

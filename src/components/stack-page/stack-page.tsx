@@ -10,6 +10,7 @@ import { Action } from "../../types/action";
 import useForm from "../../hooks/useForm";
 import { setTimeoutPromise } from "../../utils/common";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { TEST_IDS } from "../../constants/test-ids";
 
 const stack = new Stack<string>();
 
@@ -114,6 +115,7 @@ export const StackPage: React.FC = () => {
             text="Добавить"
             isLoader={isLoader && action === Action.Add}
             disabled={!values.string || (isLoader && action !== Action.Add)}
+            data-testid={TEST_IDS.addButton}
           />
           <Button
             type="button"
@@ -121,6 +123,7 @@ export const StackPage: React.FC = () => {
             onClick={deleteHandler}
             isLoader={isLoader && action === Action.Delete}
             disabled={stackState.items.length === 0 || (isLoader && action !== Action.Delete)}
+            data-testid={TEST_IDS.delButton}
           />
         </form>
         <Button
@@ -129,6 +132,7 @@ export const StackPage: React.FC = () => {
           onClick={clearHandler}
           isLoader={isLoader && action === Action.Clear}
           disabled={stackState.items.length === 0 || (isLoader && action !== Action.Clear)}
+          data-testid={TEST_IDS.clearButton}
         />
       </div>
       <ul className={styles.list}>
@@ -145,6 +149,7 @@ export const StackPage: React.FC = () => {
                     ? ElementStates.Changing
                     : ElementStates.Default
                 }
+                data-testid={`circle-${index}`}
               />
             );
           })}

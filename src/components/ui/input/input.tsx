@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./input.module.css";
+import { ENTER_TEXT } from "../../../constants/placeholders";
 
 interface InputProps extends React.HTMLProps<HTMLInputElement> {
   placeholder?: string;
@@ -8,7 +9,7 @@ interface InputProps extends React.HTMLProps<HTMLInputElement> {
 }
 
 export const Input: React.FC<InputProps> = ({
-  placeholder = "Введите текст",
+  placeholder = ENTER_TEXT,
   extraClass = "",
   type = "text",
   maxLength,

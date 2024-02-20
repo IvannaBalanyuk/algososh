@@ -1,98 +1,130 @@
-import { TColumnObj, TSetColumnsArrDispatch } from "../../types/common";
 import { Direction } from "../../types/direction";
 import { ElementStates } from "../../types/element-states";
-import { setStateWithTimeout, swapIndexes } from "../../utils/common";
+import { TStep } from "./types";
 
-export async function bubbleSort(
-  arr: TColumnObj[] | null,
-  direction: Direction,
-  setColumnsArr: React.Dispatch<React.SetStateAction<TSetColumnsArrDispatch>>
-) {
-  if (arr === null || arr.length === 0) {
-    return;
+export function getBubbleSortSteps(
+  sourceArray: number[],
+  direction: Direction = Direction.Ascending
+): TStep[] {
+  const steps: TStep[] = [];
+
+  if (sourceArray.length <= 1) {
+    steps.push({
+      currentArr: [...sourceArray],
+      sortedIndexes: [],
+    });
+    
+    return steps;
   }
 
-  let sortedArr = arr.map((item) => item);
-  const { length } = sortedArr;
+  let isElementSwapped;
+  let iterationCount = 0;
 
-  for (let i = 0; i < length - 1; i++) {
-    for (let j = 0; j < length - 1 - i; j++) {
-      let prev;
-      const curr = sortedArr[j];
-      const next = sortedArr[j + 1];
-
-      if (j !== 0) {
-        prev = sortedArr[j - 1];
-        prev.state = ElementStates.Default;
-      }
-      curr.state = ElementStates.Changing;
-      next.state = ElementStates.Changing;
-      await setStateWithTimeout(setColumnsArr, 500, sortedArr);
-
-      const requirement =
+  do {
+    isElementSwapped = false;
+    for (let i = 0; i < sourceArray.length - 1 - iterationCount; i++) {
+      if (
         direction === Direction.Ascending
-          ? next.index < curr.index
-          : next.index > curr.index;
-
-      if (requirement) {
-        swapIndexes(sortedArr, j, j + 1);
-        await setStateWithTimeout(setColumnsArr, 500, sortedArr);
+          ? sourceArray[i] > sourceArray[i + 1]
+          : sourceArray[i] < sourceArray[i + 1]
+      ) {
+        let temp = sourceArray[i];
+        sourceArray[i] = sourceArray[i + 1];
+        sourceArray[i + 1] = temp;
+        isElementSwapped = true;
       }
+
+      steps.push({
+        currentArr: [...sourceArray],
+        sortedIndexes: [...(steps[steps.length - 1]?.sortedIndexes || [])],
+        aIndex: i,
+        bIndex: i + 1,
+      });
     }
 
-    const sortedItem = sortedArr[length - 1 - i];
-    const prevItem = sortedArr[length - 2 - i];
+    steps[steps.length - 1]?.sortedIndexes.push(
+      sourceArray.length - ++iterationCount
+    );
 
-    prevItem.state = ElementStates.Default;
-    sortedItem.state = ElementStates.Modified;
-    await setStateWithTimeout(setColumnsArr, 500, sortedArr);
-  }
+  } while (isElementSwapped);
 
-  sortedArr.forEach((item) => (item.state = ElementStates.Default));
-  setColumnsArr([...sortedArr]);
+  steps.push({
+    currentArr: [...sourceArray],
+    sortedIndexes: steps[steps.length - 1]?.sortedIndexes || [],
+  });
+  
+  return steps;
 }
 
-export async function selectionSort(
-  arr: TColumnObj[] | null,
-  direction: Direction,
-  setColumnsArr: React.Dispatch<React.SetStateAction<TSetColumnsArrDispatch>>
-) {
-  if (arr === null || arr.length === 0) {
-    return;
-  }
+export function getSelectionSortSteps(
+  sourceArray: number[],
+  direction: Direction = Direction.Ascending
+): TStep[] {
+  const steps: TStep[] = [];
 
-  let sortedArr = arr.map((item) => item);
-  const { length } = sortedArr;
-
-  for (let i = 0; i < length - 1; i++) {
-    let targetIndex = i;
-
-    sortedArr[targetIndex].state = ElementStates.Changing;
-    await setStateWithTimeout(setColumnsArr, 500, sortedArr);
-
-    for (let j = i + 1; j < length; j++) {
-      const curr = sortedArr[j];
-
-      curr.state = ElementStates.Changing;
-      await setStateWithTimeout(setColumnsArr, 500, sortedArr);
-
-      const requirement =
-        direction === Direction.Ascending
-          ? curr.index <= sortedArr[targetIndex].index
-          : curr.index >= sortedArr[targetIndex].index;
-
-      if (requirement) {
-        targetIndex = j;
-      }
-      curr.state = ElementStates.Default;
-      await setStateWithTimeout(setColumnsArr, 500, sortedArr);
-    }
+  if (sourceArray.length <= 1) {
+    steps.push({
+      currentArr: [...sourceArray],
+      sortedIndexes: [],
+    });
     
-    swapIndexes(sortedArr, i, targetIndex);
-    sortedArr[i].state = ElementStates.Modified;
-    await setStateWithTimeout(setColumnsArr, 500, sortedArr);
+    return steps;
   }
 
-  sortedArr.forEach((item) => (item.state = ElementStates.Default));
-  setColumnsArr([...sortedArr]);
+  for (let i = 0; i < sourceArray.length - 1; i++) {
+    let minIndex = i;
+
+    for (let j = i + 1; j < sourceArray.length; j++) {
+      steps.push({
+        currentArr: [...sourceArray],
+        aIndex: i,
+        bIndex: j,
+        sortedIndexes: [...(steps[steps.length - 1]?.sortedIndexes || [])],
+      });
+
+      if (
+        direction === Direction.Ascending
+          ? sourceArray[minIndex] > sourceArray[j]
+          : sourceArray[minIndex] < sourceArray[j]
+      ) {
+        minIndex = j;
+      }
+    }
+
+    if (minIndex !== i) {
+      [sourceArray[i], sourceArray[minIndex]] = [
+        sourceArray[minIndex],
+        sourceArray[i],
+      ];
+    }
+
+    steps[steps.length - 1].sortedIndexes.push(i);
+  }
+
+  steps.push({
+    currentArr: [...sourceArray],
+    sortedIndexes: steps[steps.length - 1]?.sortedIndexes || [],
+  });
+
+  return steps;
+}
+
+export function getColumnState(
+  index: number,
+  maxIndex: number,
+  currentStepIndex: number,
+  currentStep: TStep
+): ElementStates {
+  if ([currentStep.aIndex, currentStep.bIndex].includes(index)) {
+    return ElementStates.Changing;
+  }
+
+  if (
+    currentStep.sortedIndexes.includes(index) ||
+    (currentStepIndex === maxIndex && maxIndex > 0)
+  ) {
+    return ElementStates.Modified;
+  }
+
+  return ElementStates.Default;
 }

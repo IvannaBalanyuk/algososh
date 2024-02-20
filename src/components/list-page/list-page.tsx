@@ -11,6 +11,8 @@ import { LinkedList } from "./utils";
 import { getRandomStrArr, setTimeoutPromise } from "../../utils/common";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
+import { TEST_IDS } from "../../constants/test-ids";
+import { ENTER_INDEX, ENTER_TEXT } from "../../constants/placeholders";
 
 type TListState = {
   items: string[];
@@ -161,15 +163,14 @@ export const ListPage: React.FC = () => {
   };
 
   const addByIndexHandler = async () => {
-    if (values.index && (values.string.length === 0 || values.index < 0))
-      return;
+    if (values.index === null || values.index < 0) return;
 
     setAction(Action.AddByIndex);
     setIsLoader(true);
 
-    let currentIndex = -1;
+    let currentIndex = 0;
 
-    while (values.index && currentIndex <= values.index) {
+    while (currentIndex <= values.index) {
       setListState({
         ...listState,
         topIndex: currentIndex,
@@ -179,16 +180,15 @@ export const ListPage: React.FC = () => {
       currentIndex++;
     }
 
-    if (values.index) {
-      linkedList.addByIndex(values.string, values.index);
-      setListState({
-        ...listState,
-        items: linkedList.turnIntoArr(),
-        topIndex: null,
-        changingIndex: null,
-        modifiedIndex: values.index,
-      });
-    }
+    linkedList.addByIndex(values.string, values.index);
+    setListState({
+      ...listState,
+      items: linkedList.turnIntoArr(),
+      topIndex: null,
+      changingIndex: null,
+      modifiedIndex: values.index,
+    });
+
     await setTimeoutPromise(SHORT_DELAY_IN_MS);
 
     setListState({
@@ -211,7 +211,7 @@ export const ListPage: React.FC = () => {
     setAction(Action.DeleteByIndex);
     setIsLoader(true);
 
-    let currentIndex = -1;
+    let currentIndex = 0;
 
     while (currentIndex <= values.index) {
       setListState({
@@ -275,6 +275,7 @@ export const ListPage: React.FC = () => {
             disabled={
               !values.string || (isLoader && action !== Action.AddToHead)
             }
+            data-testid={TEST_IDS.addToHeadBtn}
           />
           <Button
             type="button"
@@ -285,6 +286,7 @@ export const ListPage: React.FC = () => {
             disabled={
               !values.string || (isLoader && action !== Action.AddToTail)
             }
+            data-testid={TEST_IDS.addToTailBtn}
           />
           <Button
             type="button"
@@ -296,6 +298,7 @@ export const ListPage: React.FC = () => {
               listState.items.length === 0 ||
               (isLoader && action !== Action.DeleteFromHead)
             }
+            data-testid={TEST_IDS.delFromHeadBtn}
           />
           <Button
             type="button"
@@ -307,11 +310,12 @@ export const ListPage: React.FC = () => {
               listState.items.length === 0 ||
               (isLoader && action !== Action.DeleteFromTail)
             }
+            data-testid={TEST_IDS.delFromTailBtn}
           />
         </div>
         <div className={styles.wrapper}>
           <Input
-            placeholder="Введите индекс"
+            placeholder={ENTER_INDEX}
             type="number"
             maxLength={1}
             extraClass={styles.input}
@@ -336,6 +340,7 @@ export const ListPage: React.FC = () => {
               !isIndexValid(values.index) ||
               (isLoader && action !== Action.AddByIndex)
             }
+            data-testid={TEST_IDS.addByIndexBtn}
           />
           <Button
             type="button"
@@ -349,6 +354,7 @@ export const ListPage: React.FC = () => {
               !isIndexValid(values.index) ||
               (isLoader && action !== Action.DeleteByIndex)
             }
+            data-testid={TEST_IDS.delByIndexBtn}
           />
         </div>
       </div>
@@ -361,7 +367,7 @@ export const ListPage: React.FC = () => {
                 key={index}
                 index={index}
                 head={
-                  index === listState.topIndex ? (
+                  listState.topIndex !== null && index === listState.topIndex ? (
                     <Circle
                       letter={values.string ? values.string : item}
                       isSmall={true}
@@ -374,7 +380,7 @@ export const ListPage: React.FC = () => {
                 state={
                   (index === listState.modifiedIndex &&
                     ElementStates.Modified) ||
-                  (listState.changingIndex &&
+                  (listState.changingIndex !== null &&
                     index <= listState.changingIndex &&
                     ElementStates.Changing) ||
                   ElementStates.Default
@@ -390,6 +396,7 @@ export const ListPage: React.FC = () => {
                     "tail"
                   ) : undefined
                 }
+                data-testid={`circle-${index}`}
               />
               {index !== array.length - 1 && <ArrowIcon />}
             </div>
